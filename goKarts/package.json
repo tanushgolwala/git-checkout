@@ -10,17 +10,18 @@
   },
   "dependencies": {
     "@tensorflow-models/coco-ssd": "^2.2.3",
+    "@tensorflow-models/mobilenet": "^2.1.1",
     "@tensorflow/tfjs": "^4.22.0",
     "@tensorflow/tfjs-react-native": "^1.0.0",
     "expo": "~52.0.40",
+    "expo-camera": "~16.0.18",
     "expo-gl": "^13.6.0",
+    "expo-image-manipulator": "~13.0.6",
+    "expo-image-picker": "~16.0.6",
     "expo-status-bar": "~2.0.1",
     "jpeg-js": "^0.4.4",
     "react": "18.3.1",
-    "react-native": "0.76.7",
-    "expo-image-picker": "~16.0.6",
-    "expo-image-manipulator": "~13.0.6",
-    "expo-camera": "~16.0.18"
+    "react-native": "0.76.7"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

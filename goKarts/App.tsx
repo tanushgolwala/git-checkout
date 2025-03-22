@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import DetectObjectsScreen from './pages/DetectScreen';
 import LiveCameraDetectionScreen from './pages/LiveCam';
+import ClassifyImageScreen from './pages/LiveCam';
 // import CameraView from './pages/Camera';
 
 export default function App() {
@@ -9,7 +10,7 @@ export default function App() {
     // <View style={styles.container}>
     <>
       <DetectObjectsScreen />
-      {/* <LiveCameraDetectionScreen /> */}
+      {/* <ClassifyImageScreen /> */}
     </>
 
   );
