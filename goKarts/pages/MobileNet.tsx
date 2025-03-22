@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
     ActivityIndicator,
+    Image,
+    ScrollView,
     StyleSheet,
     TouchableOpacity,
     View,
@@ -30,7 +32,14 @@ interface DetectionPrediction {
 export default function DetectObjectsScreen(): JSX.Element {
     const [isTfReady, setIsTfReady] = useState<boolean>(false);
     const [isModelReady, setIsModelReady] = useState<boolean>(false);
-    const [predictions, setPredictions] = useState<DetectionPrediction[] | null>(null);
+    const [predictions, setPredictions] = useState<DetectionPrediction[] | null>(
+        null
+    );
+    const [capturedPhoto, setCapturedPhoto] = useState<{
+        uri: string;
+        base64?: string;
+    } | null>(null);
+
     const [hasCameraPermission, setHasCameraPermission] = useState<boolean>(false);
 
     // The camera and model refs
@@ -87,16 +96,28 @@ export default function DetectObjectsScreen(): JSX.Element {
     };
 
     // Reusable detection method
-    const detectObjectsAsync = async (base64: string) => {
+    const detectObjectsAsync = async (photo: { uri: string; base64?: string }) => {
         try {
-            // Convert base64 to ArrayBuffer
-            const encoded = tf.util.encodeString(base64, "base64") as Uint8Array;
-            const rawImageData = encoded.buffer as ArrayBuffer;
+            let rawImageData: ArrayBuffer;
+            if (photo.base64) {
+                // Convert base64 to ArrayBuffer
+                const encoded = tf.util.encodeString(photo.base64, "base64") as Uint8Array;
+                rawImageData = encoded.buffer as ArrayBuffer;
+            } else {
+                // If no base64, read file from uri
+                const base64ImageData = await FileSystem.readAsStringAsync(photo.uri, {
+                    encoding: FileSystem.EncodingType.Base64,
+                });
+                const encoded = tf.util.encodeString(base64ImageData, "base64") as Uint8Array;
+                rawImageData = encoded.buffer as ArrayBuffer;
+            }
+
             const imageTensor = imageToTensor(rawImageData);
 
             if (model.current) {
                 const newPredictions = await model.current.detect(imageTensor);
                 setPredictions(newPredictions as DetectionPrediction[]);
+                // For debugging
                 console.log("===== Detect objects predictions =====");
                 console.log(newPredictions);
             }
@@ -113,18 +134,18 @@ export default function DetectObjectsScreen(): JSX.Element {
             // Capture photo with base64 data
             const pictureOptions: CameraPictureOptions = {
                 base64: true,
-                quality: 0.6, // lower quality for speed
+                quality: 0.6, // lower quality to speed up
             };
             const photo = await cameraRef.current.takePictureAsync(pictureOptions);
-            // Optionally resize the image to speed up inference
-            const manipResponse = await ImageManipulator.manipulateAsync(photo?.uri ?? "",
-                [{ resize: { width: 640 } }],
+            // Optionally resize the image
+            const manipResponse = await ImageManipulator.manipulateAsync(
+                photo?.uri ?? '',
+                [{ resize: { width: 640 } }], // smaller resizing for faster inference
                 { compress: 1, format: ImageManipulator.SaveFormat.JPEG, base64: true }
             );
-            // Run detection on the new base64 image
-            if (manipResponse.base64) {
-                await detectObjectsAsync(manipResponse.base64);
-            }
+            const captured = { uri: manipResponse.uri, base64: manipResponse.base64 };
+            setCapturedPhoto(captured);
+            await detectObjectsAsync(captured);
         } catch (error) {
             console.log("Error capturing frame:", error);
         }
@@ -155,40 +176,77 @@ export default function DetectObjectsScreen(): JSX.Element {
 
     // For bounding boxes
     const borderColors = ["blue", "green", "orange", "pink", "purple"];
-    // The "640" below matches your resize width from captureFrame.
-    // The camera preview is full screen, so the scaling factor
-    // is how 640 px maps onto this device’s actual camera area.
-    // You may need to adjust this for your layout or compute it dynamically.
-    const scalingFactor = 1.0; // Start with 1.0 if you want no scaling adjustments
+    const scalingFactor = 280 / 640; // image display size / resized image width
 
     return (
         <View style={styles.container}>
-            {/* Full screen camera preview */}
+            {/* Camera preview */}
             {hasCameraPermission ? (
-                <View style={styles.cameraContainer}>
-                    <CameraView style={styles.camera} ref={cameraRef} ratio="4:3"> 
-                    </CameraView>
-                </View>
+                <CameraView style={styles.camera} ref={cameraRef} ratio="4:3" />
             ) : (
                 <Text>No access to camera</Text>
             )}
 
-            {/* Controls for toggling live detection */}
+            {/* Controls for capturing or toggling real-time detection */}
             <View style={styles.controls}>
                 {isTfReady && isModelReady ? (
-                    isRealtime ? (
-                        <TouchableOpacity style={styles.captureButton} onPress={stopRealtimeDetection}>
-                            <Text style={styles.buttonText}>Stop Live Detection</Text>
-                        </TouchableOpacity>
-                    ) : (
-                        <TouchableOpacity style={styles.captureButton} onPress={startRealtimeDetection}>
-                            <Text style={styles.buttonText}>Start Live Detection</Text>
-                        </TouchableOpacity>
-                    )
+                    <>
+                        {!isRealtime ? (
+                            <TouchableOpacity style={styles.captureButton} onPress={startRealtimeDetection}>
+                                <Text style={styles.buttonText}>Start Live Detection</Text>
+                            </TouchableOpacity>
+                        ) : (
+                            <TouchableOpacity style={styles.captureButton} onPress={stopRealtimeDetection}>
+                                <Text style={styles.buttonText}>Stop Live Detection</Text>
+                            </TouchableOpacity>
+                        )}
+                    </>
                 ) : (
                     <ActivityIndicator size="small" />
                 )}
             </View>
+
+            {/* Display last captured frame with bounding boxes */}
+            {capturedPhoto && (
+                <ScrollView style={styles.resultContainer}>
+                    <Text style={styles.headerText}>
+                        COCO-SSD Object Detection (Last Captured Frame)
+                    </Text>
+                    <View style={styles.imageWrapper}>
+                        <Image source={{ uri: capturedPhoto.uri }} style={styles.imageContainer} />
+                        {predictions &&
+                            predictions.map((p, index) => (
+                                <View
+                                    key={index}
+                                    style={{
+                                        position: "absolute",
+                                        left: p.bbox[0] * scalingFactor,
+                                        top: p.bbox[1] * scalingFactor,
+                                        width: p.bbox[2] * scalingFactor,
+                                        height: p.bbox[3] * scalingFactor,
+                                        borderWidth: 2,
+                                        borderColor: borderColors[index % borderColors.length],
+                                        backgroundColor: "transparent",
+                                    }}
+                                />
+                            ))}
+                    </View>
+                    <View style={styles.predictionWrapper}>
+                        {!predictions && (
+                            <Text style={styles.text}>Predictions: Predicting...</Text>
+                        )}
+                        {predictions &&
+                            predictions.map((p, index) => (
+                                <Text
+                                    key={index}
+                                    style={{ ...styles.text, color: borderColors[index % borderColors.length] }}
+                                >
+                                    {p.class}: {Math.round(p.score * 100) / 100}
+                                </Text>
+                            ))}
+                    </View>
+                </ScrollView>
+            )}
         </View>
     );
 }
@@ -196,16 +254,9 @@ export default function DetectObjectsScreen(): JSX.Element {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#000",
-    },
-    cameraContainer: {
-        flex: 1,
     },
     camera: {
         flex: 1,
-    },
-    overlay: {
-        ...StyleSheet.absoluteFillObject,
     },
     controls: {
         position: "absolute",
@@ -218,9 +269,45 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: "#66c8cf",
         borderRadius: 5,
+        marginBottom: 5,
     },
     buttonText: {
         color: "#fff",
+        fontSize: 16,
+    },
+    resultContainer: {
+        flex: 1,
+        backgroundColor: "#fff",
+    },
+    headerText: {
+        marginTop: 10,
+        fontSize: 20,
+        fontWeight: "bold",
+        textAlign: "center",
+    },
+    imageWrapper: {
+        width: 300,
+        height: 300,
+        borderColor: "#66c8cf",
+        borderWidth: 3,
+        borderStyle: "dashed",
+        alignSelf: "center",
+        marginTop: 10,
+        position: "relative",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    imageContainer: {
+        width: 280,
+        height: 280,
+    },
+    predictionWrapper: {
+        width: "100%",
+        flexDirection: "column",
+        alignItems: "center",
+        marginVertical: 10,
+    },
+    text: {
         fontSize: 16,
     },
 });
