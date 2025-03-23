@@ -1,0 +1,10 @@
+[
+    {
+        "name": "Carrots",
+        "image": "../assets/items/carrot.png"
+    },
+    {
+        "name": "Chips",
+        "image": "../assets/items/chips.png"
+    }
+]

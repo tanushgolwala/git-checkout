@@ -1,92 +1,198 @@
-import React from "react";
-import { Text, Image, StyleSheet, View, Dimensions, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+  SafeAreaView,
+} from "react-native";
+import BottomNavBar from "../components/navbar";
+import recentlyViewedData from "../assets/items/data.json";
 
-const { height, width } = Dimensions.get("window");
-
-function HomePage() {
-    const ongetStarted = () => {
-        console.log('Button Pressed');
-    }
-    return (
-        <View style={styles.wrapper}>
-            <Image source={require('../assets/Man.png')} style={styles.image} />
-            <View style={styles.container}>
-                <View style={styles.textContainer}>
-                    <Text style={styles.boldtext}>Discover Shopping Like Never Before</Text>
-                    <View style={{ height: '15%' }} />
-                    <Text style={styles.text}>Discover smart billing checkout, AI recommendation and more</Text>
-                    <View style={{ height: '12%' }} />
-                    <TouchableOpacity style={styles.button} onPress={ongetStarted}>
-                        <View style={styles.buttoncont}>
-                            <Text style={styles.buttontext}>Get Started</Text>
-                            <Image source={require('../assets/arrow.png')} style={{ margin: '2%', marginLeft: '-10%' }} />
-                        </View>
-                    </TouchableOpacity>
-
-                </View>
-            </View>
-        </View>
-    );
+interface RecentlyViewedItem {
+  name: string;
+  image: string;
 }
 
+const HomePage = (): JSX.Element => {
+  const [recentlyViewed, setRecentlyViewed] = useState<RecentlyViewedItem[]>([]);
+
+  useEffect(() => {
+    // Load the recently viewed items from the JSON file
+    setRecentlyViewed(recentlyViewedData);
+    console.log(recentlyViewedData);
+  }, []);
+
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <ScrollView>
+          {/* Header */}
+          <View style={styles.header}>
+            <View style={styles.profileContainer}>
+              <Image
+                source={require("../assets/icons/profile.png")}
+                style={styles.profileImage}
+              />
+              <View>
+                <Text style={styles.greeting}>Hello Sameer</Text>
+                <Text style={styles.welcomeMessage}>Welcome to GoKarts</Text>
+              </View>
+            </View>
+            <TouchableOpacity style={styles.notificationIconContainer}>
+              <Image
+                source={require("../assets/icons/notif.png")}
+                style={styles.notificationIcon}
+              />
+            </TouchableOpacity>
+          </View>
+
+          {/* Search Bar */}
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search"
+              placeholderTextColor="#888"
+            />
+            <TouchableOpacity style={styles.searchIconContainer}>
+              <Image
+                source={require("../assets/search.png")}
+                style={styles.searchIcon}
+              />
+            </TouchableOpacity>
+          </View>
+
+          {/* Promotional Banner */}
+          <View style={styles.bannerContainer}>
+            <Image
+              source={require("../assets/banner.png")}
+              style={styles.bannerImage}
+            />
+          </View>
+
+          {/* Recently Viewed */}
+          <View style={styles.recentlyViewedContainer}>
+            <Text style={styles.sectionTitle}>Recently Viewed</Text>
+            <View style={styles.recentlyViewedItems}>
+              {recentlyViewed.map((item, index) => (
+                <View key={index} style={styles.itemContainer}>
+                  <Image
+                    source={{ uri: item.image }}
+                    style={styles.itemImage}
+                  />
+                  <Text style={styles.itemLabel}>{item.name}</Text>
+                </View>
+              ))}
+            </View>
+          </View>
+        </ScrollView>
+
+        {/* Bottom Navigation Bar */}
+        <BottomNavBar />
+      </View>
+    </SafeAreaView>
+  );
+};
+
 const styles = StyleSheet.create({
-    wrapper: {
-        flex: 1,
-        position: 'relative',
-    },
-    image: {
-        position: "absolute",
-        width: width,
-        height: height,
-        resizeMode: "cover",
-    },
-    container: {
-        position: 'absolute',
-        bottom: 0,
-        width: '100%',
-        height: height * 0.5,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "rgb(255, 255, 255)",
-        borderTopStartRadius: 30,
-        borderTopEndRadius: 30,
-    },
-    text: {
-        fontSize: 18,
-        textAlign: "center",
-        padding: 10,
-        fontFamily: 'Inter',
-        color: '#676464',
-    },
-    textContainer: {
-        padding: 20,
-    },
-    boldtext: {
-        fontSize: 33,
-        fontWeight: "bold",
-        color: '#000',
-        textAlign: "center",
-    },
-    button: {
-        alignSelf: "center",
-        backgroundColor: "#A7D129",
-        borderRadius: 50,
-        width: width * 0.8,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    buttontext: {
-        color: "#fff",
-        fontSize: 15,
-        padding: 20,
-        fontFamily: 'Inter',
-        flex: 1,
-        textAlign: 'center'
-    },
-    buttoncont: {
-        display: "flex",
-        flexDirection: "row",
-    }
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingVertical: '8%',
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 20,
+  },
+  profileContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  profileImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  greeting: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  welcomeMessage: {
+    fontSize: 14,
+    color: "#888",
+  },
+  notificationIconContainer: {
+    padding: 10,
+  },
+  notificationIcon: {
+    width: 40,
+    height: 40,
+  },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: 20,
+    marginBottom: 20,
+    backgroundColor: "#f2f2f2",
+    borderRadius: 10,
+    paddingHorizontal: 10,
+  },
+  searchInput: {
+    flex: 1,
+    height: 40,
+    fontSize: 16,
+  },
+  searchIconContainer: {
+    padding: 5,
+  },
+  searchIcon: {
+    width: 24,
+    height: 24,
+  },
+  bannerContainer: {
+    marginHorizontal: 20,
+    marginBottom: 20,
+  },
+  bannerImage: {
+    width: "100%",
+    height: 150,
+    borderRadius: 10,
+  },
+  recentlyViewedContainer: {
+    marginHorizontal: 20,
+    marginBottom: 20,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  recentlyViewedItems: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  itemContainer: {
+    alignItems: "center",
+    width: "48%",
+    backgroundColor: "#f2f2f2",
+    borderRadius: 10,
+    padding: 10,
+  },
+  itemImage: {
+    width: 100,
+    height: 100,
+    marginBottom: 10,
+  },
+  itemLabel: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
 });
 
 export default HomePage;

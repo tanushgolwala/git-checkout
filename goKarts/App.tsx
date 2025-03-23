@@ -4,13 +4,25 @@ import DetectObjectsScreen from './pages/DetectScreen';
 import LiveCameraDetectionScreen from './pages/LiveCam';
 import ClassifyImageScreen from './pages/LiveCam';
 import HomePage from './pages/HomePage';
+import BottomNavBar from './components/navbar';
+import ShoppingListScreen from './pages/ListMaker';
+import ShoppingList from './pages/ListScreen';
+import YourCart from './pages/Cart';
 // import CameraView from './pages/Camera';
 
 export default function App() {
   return (
     <>
-      <HomePage />
-    </>
+      {/* <ShoppingListScreen /> */}
+      {/* <ShoppingList /> */}
+      <YourCart />
+      {/* <HomePage /> */}
+      {/* <DetectObjectsScreen /> */}
+      {/* <LiveCameraDetectionScreen /> */}
+      {/* <ClassifyImageScreen /> */}
+      {/* <CameraView /> */}
+      {/* <BottomNavBar /> */}
+      </>
 
   );
 }
