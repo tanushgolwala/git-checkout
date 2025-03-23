@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 import { Picker } from '@react-native-picker/picker'; // Make sure to install this library!
-import BottomNavBar from '../components/navbar';
+import BottomNavBar from '../Navigators/navbar';
 
 const ShoppingListScreen = () => {
     const [selectedItem, setSelectedItem] = useState('');
@@ -102,7 +102,7 @@ const ShoppingListScreen = () => {
                         />
                     </TouchableOpacity>
                 </ScrollView>
-                <BottomNavBar />
+                {/* <BottomNavBar /> */}
             </View>
         </SafeAreaView>
     );

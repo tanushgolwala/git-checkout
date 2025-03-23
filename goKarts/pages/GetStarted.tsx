@@ -1,11 +1,14 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { Text, Image, StyleSheet, View, Dimensions, TouchableOpacity } from "react-native";
 
 const { height, width } = Dimensions.get("window");
 
 function GetStarted() {
+    const navigation = useNavigation();
     const ongetStarted = () => {
         console.log('Button Pressed');
+        navigation.navigate('Home');
     }
     return (
         <View style={styles.wrapper}>
@@ -19,7 +22,7 @@ function GetStarted() {
                     <TouchableOpacity style={styles.button} onPress={ongetStarted}>
                         <View style={styles.buttoncont}>
                             <Text style={styles.buttontext}>Get Started</Text>
-                            <Image source={require('../assets/arrow.png')} style={{ margin: '2%', marginLeft: '-10%' }} />
+                            <Image source={require('../assets/icons/arrow-right.png')} style={{ margin: '2%', marginLeft: '-10%' }} />
                         </View>
                     </TouchableOpacity>
 

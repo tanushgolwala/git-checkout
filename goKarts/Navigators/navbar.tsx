@@ -7,35 +7,43 @@ import {
   Animated,
   ImageSourcePropType,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 interface TabConfig {
-  name: string;
+  name: string;            // Label for internal logic
   icon: ImageSourcePropType;
+  routeName: string;       // Corresponding screen in your stack
 }
 
 const BottomNavBar = (): JSX.Element => {
+  const navigation = useNavigation();
   const [activeTab, setActiveTab] = useState<string>("Home");
 
+  // Define the tabs and the routes they should navigate to
   const tabs: TabConfig[] = [
     {
       name: "Home",
+      routeName: "Home",
       icon: require("../assets/navbar/home.png"),
     },
     {
       name: "Lists",
+      routeName: "ListMaker",
       icon: require("../assets/navbar/lists.png"),
     },
     {
       name: "AI",
+      routeName: "AIgen",
       icon: require("../assets/navbar/AI.png"),
     },
     {
       name: "Cart",
+      routeName: "Cart",
       icon: require("../assets/navbar/cart.png"),
     },
   ];
 
-  // Create a ref that stores a dictionary of Animated.Value objects keyed by tab name
+  // Store an Animated.Value for each tab’s scale
   const scales = useRef<Record<string, Animated.Value>>(
     tabs.reduce((acc, tab) => {
       acc[tab.name] = new Animated.Value(tab.name === activeTab ? 1.2 : 1);
@@ -44,13 +52,13 @@ const BottomNavBar = (): JSX.Element => {
   ).current;
 
   useEffect(() => {
-    // Animate the active tab scale up
+    // Scale up the active tab
     Animated.spring(scales[activeTab], {
       toValue: 1.2,
       useNativeDriver: true,
     }).start();
 
-    // Reset the scale of other tabs
+    // Scale down the other tabs
     tabs.forEach((tab) => {
       if (tab.name !== activeTab) {
         Animated.spring(scales[tab.name], {
@@ -61,6 +69,12 @@ const BottomNavBar = (): JSX.Element => {
     });
   }, [activeTab, scales, tabs]);
 
+  // When a tab is pressed, set it active & navigate to its screen
+  const handleTabPress = (tab: TabConfig) => {
+    setActiveTab(tab.name);
+    navigation.navigate(tab.routeName as never);
+  };
+
   return (
     <View style={styles.container}>
       {tabs.map((tab) => {
@@ -70,7 +84,7 @@ const BottomNavBar = (): JSX.Element => {
           <TouchableOpacity
             key={tab.name}
             style={styles.tabButton}
-            onPress={() => setActiveTab(tab.name)}
+            onPress={() => handleTabPress(tab)}
             activeOpacity={0.8}
           >
             <Animated.View

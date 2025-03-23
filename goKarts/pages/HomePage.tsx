@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from "react-native";
-import BottomNavBar from "../components/navbar";
+import BottomNavBar from "../Navigators/navbar";
 import recentlyViewedData from "../assets/items/data.json";
 
 interface RecentlyViewedItem {
@@ -59,7 +59,7 @@ const HomePage = (): JSX.Element => {
             />
             <TouchableOpacity style={styles.searchIconContainer}>
               <Image
-                source={require("../assets/search.png")}
+                source={require("../assets/icons/search.png")}
                 style={styles.searchIcon}
               />
             </TouchableOpacity>
@@ -89,9 +89,6 @@ const HomePage = (): JSX.Element => {
             </View>
           </View>
         </ScrollView>
-
-        {/* Bottom Navigation Bar */}
-        <BottomNavBar />
       </View>
     </SafeAreaView>
   );

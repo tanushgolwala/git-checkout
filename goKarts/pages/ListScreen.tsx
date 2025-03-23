@@ -8,7 +8,7 @@ import {
     ScrollView,
     SafeAreaView,
 } from 'react-native';
-import BottomNavBar from '../components/navbar';
+import BottomNavBar from '../Navigators/navbar';
 
 interface Item {
     id: number;
@@ -130,10 +130,7 @@ const ShoppingList = () => {
                         </View>
                     ))}
                 </ScrollView>
-
-
-                <BottomNavBar />
-
+                {/* <BottomNavBar /> */}
             </View>
         </SafeAreaView>
     );
