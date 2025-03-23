@@ -1,10 +1,10 @@
 [
     {
         "name": "Carrots",
-        "image": "../assets/items/carrot.png"
+        "image": "https://www.allthatgrows.in/cdn/shop/products/Carrot-Orange.jpg?v=1598079671"
     },
     {
         "name": "Chips",
-        "image": "../assets/items/chips.png"
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp4eYUUfu6fjOv5yYHbJXEKepogjqPsoWy6w&s"
     }
 ]

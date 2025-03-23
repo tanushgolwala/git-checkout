@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from "react-native";
-import BottomNavBar from "../Navigators/navbar";
 import recentlyViewedData from "../assets/items/data.json";
 import { useNavigation } from "@react-navigation/native";
 
