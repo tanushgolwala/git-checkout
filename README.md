@@ -1,47 +1,47 @@
-Smart Shopping Cart (GoKarts)
+# Smart Shopping Cart (GoKarts)
 
 The Smart Shopping Cart uses an ESP32-CAM for live video streaming, image capture, and object detection. The system integrates with a React Native mobile application for cart monitoring, shopping list management, and product classification.
 
-Features
-Hardware
+## Features
+### Hardware
 
     ESP32-CAM Integration:
 
-        Streams live video from the cart’s camera.
+        1. Streams live video from the cart’s camera.
 
-        Connects to WiFi for communication with the mobile app.
+        2. Connects to WiFi for communication with the mobile app.
 
     LED Flash:
 
-        Activates during image capture for confirmation
+        1. Activates during image capture for confirmation
 
-Mobile Application
+### Mobile Application
 
     React Native Interface:
 
-        Displays live video from the cart.
+        1. Displays live video from the cart.
 
-        Detects and classifies objects.
+        2. Detects and classifies objects.
 
-        Creates and manages shopping lists.
+        3. Creates and manages shopping lists.
 
-        Previews items in the cart.
+        4. Previews items in the cart.
 
-Usage
+## Usage
 
-    Start the ESP32-CAM server and confirm the stream is accessible.
+    1. Start the ESP32-CAM server and confirm the stream is accessible.
 
-    Launch the React Native app.
+    2. Launch the React Native app.
 
-    Navigate through the app:
+    3. Navigate through the app:
 
-        View the live stream.
+        a. View the live stream.
 
-        Detect and classify objects.
+        b. Detect and classify objects.
 
-        Manage the shopping list.
+        c. Manage the shopping list.
 
-        Review the cart items.
+        d. Review the cart items.
 
 
 
