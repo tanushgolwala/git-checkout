@@ -8,6 +8,7 @@ import BottomNavBar from './components/navbar';
 import ShoppingListScreen from './pages/ListMaker';
 import ShoppingList from './pages/ListScreen';
 import YourCart from './pages/Cart';
+import AIgen from './pages/AIgen';
 // import CameraView from './pages/Camera';
 
 export default function App() {
@@ -15,14 +16,15 @@ export default function App() {
     <>
       {/* <ShoppingListScreen /> */}
       {/* <ShoppingList /> */}
-      <YourCart />
+      {/* <YourCart /> */}
+      <AIgen />
       {/* <HomePage /> */}
       {/* <DetectObjectsScreen /> */}
       {/* <LiveCameraDetectionScreen /> */}
       {/* <ClassifyImageScreen /> */}
       {/* <CameraView /> */}
       {/* <BottomNavBar /> */}
-      </>
+    </>
 
   );
 }
