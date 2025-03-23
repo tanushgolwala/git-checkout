@@ -12,10 +12,13 @@ import {
 
 import { Picker } from '@react-native-picker/picker'; // Make sure to install this library!
 import BottomNavBar from '../Navigators/navbar';
+import { useNavigation } from '@react-navigation/native';
 
 const ShoppingListScreen = () => {
     const [selectedItem, setSelectedItem] = useState('');
     const [quantity, setQuantity] = useState('');
+
+    const navigation = useNavigation();
 
     const handleAddItem = () => {
         if (selectedItem && quantity) {
@@ -28,6 +31,7 @@ const ShoppingListScreen = () => {
 
     const handleViewShoppingList = () => {
         // Navigate to shopping list screen
+        navigation.navigate('ListScreen');
         console.log('Navigating to Shopping List');
     };
 
@@ -55,7 +59,7 @@ const ShoppingListScreen = () => {
 
                     {/* Add Items Box */}
                     <View style={styles.addItemContainer}>
-                        <Text style={styles.addItemsTitle}>Add Items</Text>
+                        <Text style={styles.addItemsTitle}>Create your shopping list</Text>
 
                         {/* Picker */}
                         <Text style={styles.label}>Item</Text>
@@ -96,10 +100,6 @@ const ShoppingListScreen = () => {
                         onPress={handleViewShoppingList}
                     >
                         <Text style={styles.viewListButtonText}>View Shopping List</Text>
-                        <Image
-                            source={require('../assets/icons/arrow-right.png')}
-                            style={styles.arrowRight}
-                        />
                     </TouchableOpacity>
                 </ScrollView>
                 {/* <BottomNavBar /> */}
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     label: {
-        fontSize: 14,
+        fontSize: 18,
         color: '#000',
         marginBottom: 5,
         marginTop: 10,
@@ -177,7 +177,9 @@ const styles = StyleSheet.create({
     },
     quantityRow: {
         flexDirection: 'row',
-        marginTop: 10,
+        marginTop: 0,
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
     quantityInput: {
         flex: 1,
@@ -196,6 +198,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         justifyContent: 'center',
         alignItems: 'center',
+        height: 35,
     },
     addButtonText: {
         color: '#fff',

@@ -13,6 +13,8 @@ import ShoppingListScreen from "./pages/ListMaker";
 import YourCart from "./pages/Cart";
 import BottomNavBar from "./Navigators/navbar";
 import AIgen from "./pages/AIgen";
+import ShoppingList from "./pages/ListScreen";
+import ProfilePage from "./pages/Profile";
 
 const Stack = createNativeStackNavigator();
 
@@ -29,18 +31,19 @@ export default function App() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, paddingBottom: '3%' }}>
       <NavigationContainer ref={navigationRef} onStateChange={handleStateChange}>
         <Stack.Navigator initialRouteName="Getstart" screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Getstart" component={GetStarted} />
           <Stack.Screen name="Home" component={HomePage} />
           <Stack.Screen name="ListMaker" component={ShoppingListScreen} />
-          <Stack.Screen name="ListScreen" component={ShoppingListScreen} />
+          <Stack.Screen name="ListScreen" component={ShoppingList} />
           <Stack.Screen name="Cart" component={YourCart} />
           <Stack.Screen name="AIgen" component={AIgen} />
+          <Stack.Screen name="Profile" component={ProfilePage} />
         </Stack.Navigator>
 
-        {currentRoute !== "Getstart" && <BottomNavBar />}
+        {currentRoute && currentRoute !== "Getstart" && <BottomNavBar />}
 
         <StatusBar style="auto" />
       </NavigationContainer>

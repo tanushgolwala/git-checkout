@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect, useState } from 'react';
 import {
     View,
     Text,
@@ -21,7 +22,6 @@ interface Item {
 
 const YourCart = () => {
     // const navigation = useNavigation();
-
     const [items] = useState<Item[]>([
         {
             id: 1,
@@ -164,6 +164,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#FFFFFF',
         paddingVertical: '8%',
+        paddingBottom: "23%",
     },
     header: {
         flexDirection: 'row',
@@ -229,12 +230,13 @@ const styles = StyleSheet.create({
     billSection: {
         backgroundColor: '#F5F5F5',
         padding: 16,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
+        borderRadius: 20,
         shadowColor: '#000',
         shadowOpacity: 0.1,
         shadowRadius: 10,
         elevation: 10,
+        width: '92%',
+        alignSelf: 'center',
     },
     billRow: {
         flexDirection: 'row',
@@ -264,7 +266,7 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     checkoutButton: {
-        backgroundColor: '#000',
+        backgroundColor: '#A7D129',
         borderRadius: 30,
         flexDirection: 'row',
         alignItems: 'center',

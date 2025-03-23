@@ -7,7 +7,7 @@ import {
   Animated,
   ImageSourcePropType,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, CommonActions } from "@react-navigation/native";
 
 interface TabConfig {
   name: string;            // Label for internal logic
@@ -72,7 +72,12 @@ const BottomNavBar = (): JSX.Element => {
   // When a tab is pressed, set it active & navigate to its screen
   const handleTabPress = (tab: TabConfig) => {
     setActiveTab(tab.name);
-    navigation.navigate(tab.routeName as never);
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: tab.routeName }],
+      })
+    );
   };
 
   return (
@@ -115,12 +120,15 @@ const BottomNavBar = (): JSX.Element => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
+    position: "absolute",
+    bottom: 5,
     backgroundColor: "#F2F2F2",
     justifyContent: "space-around",
     alignItems: "center",
     paddingVertical: 10,
     borderRadius: 30,
-    margin: 20,
+    margin: 10,
+    marginTop: 0,
     elevation: 5,
     shadowColor: "#000",
     shadowOpacity: 0.1,

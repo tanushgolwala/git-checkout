@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import BottomNavBar from "../Navigators/navbar";
 import recentlyViewedData from "../assets/items/data.json";
+import { useNavigation } from "@react-navigation/native";
 
 interface RecentlyViewedItem {
   name: string;
@@ -23,8 +24,15 @@ const HomePage = (): JSX.Element => {
   useEffect(() => {
     // Load the recently viewed items from the JSON file
     setRecentlyViewed(recentlyViewedData);
-    console.log(recentlyViewedData);
+    // console.log(recentlyViewedData);
   }, []);
+
+  const navigation = useNavigation();
+
+  const goToProfile = () => {
+    navigation.navigate("Profile");
+    console.log("Navigating to Profile");
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -32,7 +40,7 @@ const HomePage = (): JSX.Element => {
         <ScrollView>
           {/* Header */}
           <View style={styles.header}>
-            <View style={styles.profileContainer}>
+            <TouchableOpacity onPress={goToProfile} style={styles.profileContainer}>
               <Image
                 source={require("../assets/icons/profile.png")}
                 style={styles.profileImage}
@@ -41,7 +49,7 @@ const HomePage = (): JSX.Element => {
                 <Text style={styles.greeting}>Hello Sameer</Text>
                 <Text style={styles.welcomeMessage}>Welcome to GoKarts</Text>
               </View>
-            </View>
+            </TouchableOpacity>
             <TouchableOpacity style={styles.notificationIconContainer}>
               <Image
                 source={require("../assets/icons/notif.png")}
@@ -51,7 +59,7 @@ const HomePage = (): JSX.Element => {
           </View>
 
           {/* Search Bar */}
-          <View style={styles.searchContainer}>
+          {/* <View style={styles.searchContainer}>
             <TextInput
               style={styles.searchInput}
               placeholder="Search"
@@ -63,7 +71,7 @@ const HomePage = (): JSX.Element => {
                 style={styles.searchIcon}
               />
             </TouchableOpacity>
-          </View>
+          </View> */}
 
           {/* Promotional Banner */}
           <View style={styles.bannerContainer}>
