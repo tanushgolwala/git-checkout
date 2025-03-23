@@ -1,4 +1,4 @@
-Smart Shopping Cart
+Smart Shopping Cart (GoKarts)
 
 The Smart Shopping Cart uses an ESP32-CAM for live video streaming, image capture, and object detection. The system integrates with a React Native mobile application for cart monitoring, shopping list management, and product classification.
 
@@ -42,6 +42,7 @@ Usage
         Manage the shopping list.
 
         Review the cart items.
+
 
 
 
