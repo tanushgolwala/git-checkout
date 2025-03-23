@@ -3,14 +3,13 @@ import { StyleSheet, Text, View } from 'react-native';
 import DetectObjectsScreen from './pages/DetectScreen';
 import LiveCameraDetectionScreen from './pages/LiveCam';
 import ClassifyImageScreen from './pages/LiveCam';
+import HomePage from './pages/HomePage';
 // import CameraView from './pages/Camera';
 
 export default function App() {
   return (
-    // <View style={styles.container}>
     <>
-      <DetectObjectsScreen />
-      {/* <ClassifyImageScreen /> */}
+      <HomePage />
     </>
 
   );
